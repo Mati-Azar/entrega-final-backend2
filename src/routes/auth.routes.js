@@ -1,13 +1,20 @@
 import { Router } from "express";
 import passport from "passport";
 
+import jwtMiddleware from "../middlewares/jwt.middleware.js";
+import roleMiddleware from "../middlewares/role.middleware.js";
 import {
   loginController,
   signupController,
-  sessionController
+  githubController,
+  sessionController,
+  profileController,
+  adminController,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
+
+//------------------------------RUTAS DE AUTENTICACIÓN/AUTORIZACION-----------------------
 
 //-----------------Signup Tradicional (Creamos el usuario en nuestra DB)---------------------
 
@@ -28,15 +35,19 @@ router.get("/github", passport.authenticate("github"));
 router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect("/");
-  },
+  githubController,
 );
 
 //-----------------Sesion (Iniciar sesion y navegar) ---------------------
 
 router.get("/session", sessionController);
 
+//---------------------------Ruta protegida mediante JWT --------------------------
+
+router.get("/profile", jwtMiddleware, profileController);
+
+//-----------------------Ruta protegida mediante JWT y rol administrador------------
+
+router.get("/admin", jwtMiddleware, roleMiddleware("admin"), adminController);
 
 export default router;

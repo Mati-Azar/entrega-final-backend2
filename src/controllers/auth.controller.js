@@ -5,6 +5,28 @@ import jwt from "jsonwebtoken";
 import AuthError from "../errors/AuthError.js";
 import UserDAO from "../dao/user.dao.js";
 
+const signupController = async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const isEmailValid = validator.isEmail(email);
+  const isPasswordValid = validator.isStrongPassword(password);
+
+  if (!isEmailValid || !isPasswordValid) {
+    res.status(400).send("Email o Contraseña invalidos");
+  } else {
+    try {
+      const data = await bcrypt.hash(password, 10);
+
+      const newUser = await UserDAO.createUser(email, data);
+
+      res.status(201).send(newUser);
+    } catch (err) {
+      return res.status(500).send("Hubo un error generando el hash");
+    }
+  }
+};
+
 const loginController = async (req, res, next) => {
   try {
     const token = jwt.sign(
@@ -32,26 +54,9 @@ const loginController = async (req, res, next) => {
   }
 };
 
-const signupController = async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  const isEmailValid = validator.isEmail(email);
-  const isPasswordValid = validator.isStrongPassword(password);
-
-  if (!isEmailValid || !isPasswordValid) {
-    res.status(400).send("Email o Contraseña invalidos");
-  } else {
-    try {
-      const data = await bcrypt.hash(password, 10);
-
-      const newUser = await UserDAO.createUser(email, data);
-
-      res.status(201).send(newUser);
-    } catch (err) {
-      return res.status(500).send("Hubo un error generando el hash");
-    }
-  }
+const githubController = (req, res) => {
+  // Successful authentication, redirect home.
+  res.redirect("/");
 };
 
 const sessionController = (req, res) => {
@@ -66,4 +71,27 @@ const sessionController = (req, res) => {
   });
 };
 
-export { loginController, signupController, sessionController };
+const profileController = (req, res) => {
+  res.status(200).json({
+    message: "Perfil autorizado",
+    user: {
+      id: req.user.userId,
+      role: req.user.role,
+    },
+  });
+};
+
+const adminController = (req, res) => {
+  res.status(200).json({
+    message: "Panel administrador autorizado",
+  });
+};
+
+export {
+  loginController,
+  signupController,
+  githubController,
+  sessionController,
+  profileController,
+  adminController,
+};
