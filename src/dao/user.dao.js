@@ -1,9 +1,9 @@
 import userModel from "../models/user.model.js";
 
 class UserDAO {
-  static async createUser(email, password) {
+  static async createUser(email, password, role = "user") {
     console.log(email);
-    return await userModel.create({ email, password });
+    return await userModel.create({ email, password, role });
   }
 
   static async findUserByEmail(email) {

@@ -8,6 +8,7 @@ import UserDAO from "../dao/user.dao.js";
 const signupController = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const role = req.body.role;
 
   const isEmailValid = validator.isEmail(email);
   const isPasswordValid = validator.isStrongPassword(password);
@@ -18,7 +19,7 @@ const signupController = async (req, res) => {
     try {
       const data = await bcrypt.hash(password, 10);
 
-      const newUser = await UserDAO.createUser(email, data);
+      const newUser = await UserDAO.createUser(email, data, role);
 
       res.status(201).send(newUser);
     } catch (err) {
