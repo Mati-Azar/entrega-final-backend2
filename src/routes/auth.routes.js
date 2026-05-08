@@ -8,6 +8,7 @@ import {
   signupController,
   githubController,
   sessionController,
+  logoutController,
   profileController,
   adminController,
 } from "../controllers/auth.controller.js";
@@ -38,9 +39,13 @@ router.get(
   githubController,
 );
 
-//-----------------Sesion (Iniciar sesion y navegar) ---------------------
+//-----------------Sesion (Al hacer login se crea, uno puede navegar) ---------------------
 
 router.get("/session", sessionController);
+
+//--------------------Cerrar Sesion (Logout) ------------------------------
+
+router.post("/logout", logoutController);
 
 //---------------------------Ruta protegida mediante JWT --------------------------
 
