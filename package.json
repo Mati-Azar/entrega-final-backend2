@@ -4,7 +4,7 @@
   "description": "API RESTful construida con Node.js y Express, utilizando ruteo versionado, middlewares personalizados para validación, autenticación y manejo centralizado de errores.",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index.js",
+    "dev": "node --watch src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -22,5 +22,19 @@
     "email": "matias_azar@hotmail.com"
   },
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.1",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-local": "^1.0.0",
+    "validator": "^13.15.35"
+  }
 }
